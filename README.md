@@ -52,7 +52,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details. This means you are free to use, modify, and distribute this software, but any derivative works must also be distributed under the same license terms.
-
-## Security
-
-If you discover a security vulnerability within Nixvale, please send an e-mail to security@nixvale.com. All security vulnerabilities will be promptly addressed. 
