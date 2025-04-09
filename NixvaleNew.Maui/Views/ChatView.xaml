@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NixvaleNew.Maui.Views.ChatView">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Panel - Chat List -->
+        <Grid Grid.Column="0" BackgroundColor="#F5F5F5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0" BackgroundColor="#FFFFFF" Padding="15,0">
+                <Label Text="Chats" 
+                       VerticalOptions="Center"
+                       FontSize="20"
+                       FontAttributes="Bold" />
+                <Button Text="+" 
+                        HorizontalOptions="End"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        CornerRadius="20"
+                        BackgroundColor="#007AFF"
+                        TextColor="White"
+                        Command="{Binding NewChatCommand}" />
+            </Grid>
+
+            <!-- Chat List -->
+            <CollectionView Grid.Row="1" 
+                          ItemsSource="{Binding Chats}"
+                          SelectedItem="{Binding SelectedChat}"
+                          SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="15,10" BackgroundColor="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Profile Picture -->
+                            <Frame Grid.Column="0" 
+                                   HeightRequest="50" 
+                                   WidthRequest="50"
+                                   CornerRadius="25"
+                                   Padding="0"
+                                   IsClippedToBounds="True">
+                                <Image Source="{Binding ProfileImage}"
+                                       Aspect="AspectFill" />
+                            </Frame>
+
+                            <!-- Chat Info -->
+                            <StackLayout Grid.Column="1" Spacing="5" Padding="10,0,0,0">
+                                <Label Text="{Binding Name}"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding LastMessage}"
+                                       TextColor="Gray"
+                                       LineBreakMode="TailTruncation" />
+                            </StackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Right Panel - Message View -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Chat Header -->
+            <Grid Grid.Row="0" BackgroundColor="White" Padding="20,0">
+                <Label Text="{Binding SelectedChat.Name}"
+                       VerticalOptions="Center"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+            </Grid>
+
+            <!-- Messages -->
+            <CollectionView Grid.Row="1" 
+                          ItemsSource="{Binding Messages}"
+                          Margin="0,10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="20,5">
+                            <Frame BackgroundColor="{Binding IsOwn, Converter={StaticResource MessageBgColorConverter}}"
+                                   Padding="15,10"
+                                   HasShadow="False"
+                                   CornerRadius="10"
+                                   HorizontalOptions="{Binding IsOwn, Converter={StaticResource MessageAlignmentConverter}}">
+                                <StackLayout>
+                                    <Label Text="{Binding SenderName}"
+                                           FontSize="12"
+                                           TextColor="Gray"
+                                           IsVisible="{Binding ShowSenderName}" />
+                                    <Label Text="{Binding Content}"
+                                           TextColor="{Binding IsOwn, Converter={StaticResource MessageTextColorConverter}}" />
+                                    <Label Text="{Binding Timestamp, StringFormat='{0:HH:mm}'}"
+                                           FontSize="10"
+                                           TextColor="Gray"
+                                           HorizontalOptions="End" />
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Message Input -->
+            <Grid Grid.Row="2" BackgroundColor="White" Padding="20,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Frame Grid.Column="0"
+                       Padding="15,0"
+                       CornerRadius="20"
+                       BorderColor="#E5E5E5"
+                       HasShadow="False">
+                    <Entry Placeholder="Type a message..."
+                           Text="{Binding NewMessage}"
+                           ReturnCommand="{Binding SendMessageCommand}"
+                           VerticalOptions="Center" />
+                </Frame>
+
+                <Button Grid.Column="1"
+                        Text="Send"
+                        Command="{Binding SendMessageCommand}"
+                        BackgroundColor="#007AFF"
+                        TextColor="White"
+                        CornerRadius="20"
+                        Margin="10,0,0,0"
+                        HeightRequest="40"
+                        WidthRequest="80" />
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentView> 

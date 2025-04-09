@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NixvaleNew.Maui.ViewModels"
+             xmlns:debug="clr-namespace:Nixvale.Core.Debug;assembly=Nixvale.Core"
+             x:Class="NixvaleNew.Maui.MainPage"
+             x:DataType="vm:MainViewModel"
+             Title="Nixvale">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,*"
+              Padding="20">
+            
+            <!-- Status and Controls -->
+            <VerticalStackLayout Grid.Row="0" 
+                               Spacing="10">
+                <Label Text="Nixvale Status"
+                       FontSize="24"
+                       FontAttributes="Bold"/>
+                
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
+                       Padding="15">
+                    <Grid ColumnDefinitions="*,Auto" 
+                          RowDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="10"
+                          RowSpacing="10">
+                        
+                        <Label Text="Status:"
+                               Grid.Column="0"
+                               Grid.Row="0"/>
+                        <Label Text="{Binding CurrentStatus}"
+                               Grid.Column="1"
+                               Grid.Row="0"
+                               FontAttributes="Bold"/>
+
+                        <Label Text="Profile:"
+                               Grid.Column="0"
+                               Grid.Row="1"/>
+                        <Label Text="{Binding CurrentProfile.DisplayName}"
+                               Grid.Column="1"
+                               Grid.Row="1"
+                               FontAttributes="Bold"/>
+
+                        <Button Text="{Binding IsNodeRunning, Converter={StaticResource BoolToStartStopConverter}}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path={Binding IsNodeRunning, Converter={StaticResource BoolToStartStopCommandConverter}}}"
+                                Grid.ColumnSpan="2"
+                                Grid.Row="2"
+                                HorizontalOptions="Fill"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+
+            <!-- Network Information -->
+            <Frame Grid.Row="1"
+                   BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
+                   Margin="0,20,0,0"
+                   IsVisible="{Binding IsNodeRunning}"
+                   Padding="15">
+                
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                      ColumnDefinitions="Auto,*"
+                      RowSpacing="10"
+                      ColumnSpacing="10">
+                    
+                    <Label Text="IPv4 Status:"
+                           Grid.Row="0"
+                           Grid.Column="0"/>
+                    <Label Text="{Binding CurrentState.IPv4Status}"
+                           Grid.Row="0"
+                           Grid.Column="1"/>
+
+                    <Label Text="IPv6 Status:"
+                           Grid.Row="1"
+                           Grid.Column="0"/>
+                    <Label Text="{Binding CurrentState.IPv6Status}"
+                           Grid.Row="1"
+                           Grid.Column="1"/>
+
+                    <Label Text="UPnP Status:"
+                           Grid.Row="2"
+                           Grid.Column="0"/>
+                    <Label Text="{Binding CurrentState.UPnPStatus}"
+                           Grid.Row="2"
+                           Grid.Column="1"/>
+
+                    <Label Text="Connected Nodes:"
+                           Grid.Row="3"
+                           Grid.Column="0"/>
+                    <Label Text="{Binding CurrentState.IPv4DhtTotalNodes}"
+                           Grid.Row="3"
+                           Grid.Column="1"/>
+                </Grid>
+            </Frame>
+
+            <!-- Debug Log -->
+            <Frame Grid.Row="2"
+                   BorderColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Secondary}}"
+                   Margin="0,20,0,0"
+                   Padding="15">
+                
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Debug Log"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <CollectionView ItemsSource="{Binding RecentLogs}"
+                                  HeightRequest="300">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="debug:LogEntry">
+                                <Label Text="{Binding Message}"
+                                       FontFamily="Consolas"
+                                       FontSize="12"
+                                       TextColor="{Binding Level, Converter={StaticResource LogLevelToColorConverter}}"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+    </ScrollView>
+
+</ContentPage>
